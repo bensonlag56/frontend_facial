@@ -8,10 +8,31 @@
 import SwiftUI
 
 @main
-struct FacialSecurityAppApp: App {
+struct FacialRecognitionApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            TabView {
+                NavigationView {
+                    UserRegistrationView()
+                }
+                .tabItem {
+                    Label("Registro", systemImage: "person.badge.plus")
+                }
+                
+                NavigationView {
+                    FaceRecognitionView()
+                }
+                .tabItem {
+                    Label("Reconocimiento", systemImage: "faceid")
+                }
+                
+                NavigationView {
+                    UserListView()
+                }
+                .tabItem {
+                    Label("Usuarios", systemImage: "list.dash")
+                }
+            }
         }
     }
 }
