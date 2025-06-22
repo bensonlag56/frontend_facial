@@ -12,8 +12,10 @@ class APIService {
     static let shared = APIService()
     let baseURL = "http://127.0.0.1:5001" // Cambia a tu IP local o Railway
 
-    func registerUser(user: User, image: UIImage, completion: @escaping (Result<String, Error>) -> Void) {
-        guard let imageData = image.jpegData(compressionQuality: 0.8)?.base64EncodedString() else { return }
+    func registerUser(user: User, imageFront: UIImage, imageLeft: UIImage, imageRight: UIImage, completion: @escaping (Result<String, Error>) -> Void) {
+        guard let imageFrontData = imageFront.jpegData(compressionQuality: 0.8)?.base64EncodedString(),
+              let imageLeftData = imageLeft.jpegData(compressionQuality: 0.8)?.base64EncodedString(),
+              let imageRightData = imageRight.jpegData(compressionQuality: 0.8)?.base64EncodedString() else { return }
 
         let parameters: [String: Any] = [
             "nombre": user.nombre,
@@ -21,7 +23,9 @@ class APIService {
             "codigo_unico": user.codigo_unico,
             "email": user.email,
             "requisitoriado": user.requisitoriado,
-            "imagen_facial": imageData
+            "imagen_frontal": imageFrontData,
+            "imagen_izquierda": imageLeftData,
+            "imagen_derecha": imageRightData
         ]
 
         guard let url = URL(string: "\(baseURL)/register") else { return }

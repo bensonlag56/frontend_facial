@@ -13,7 +13,10 @@ struct RegisterView: View {
     @State private var codigoUnico = ""
     @State private var email = ""
     @State private var requisitoriado = false
-    @State private var image = UIImage()
+    @State private var imageFront = UIImage()
+    @State private var imageLeft = UIImage()
+    @State private var imageRight = UIImage()
+    @State private var captureStep = 0 // 0: Frontal, 1: Izquierda, 2: Derecha
     @State private var showImagePicker = false
     @State private var sourceType: UIImagePickerController.SourceType = .photoLibrary
     @State private var showActionSheet = false
@@ -28,7 +31,7 @@ struct RegisterView: View {
             TextField("Email", text: $email)
             Toggle("Requisitoriado", isOn: $requisitoriado)
 
-            Button("Seleccionar Imagen") {
+            Button(captureStepTitle()) {
                 showActionSheet = true
             }
             .actionSheet(isPresented: $showActionSheet) {
@@ -44,16 +47,37 @@ struct RegisterView: View {
                     .cancel()
                 ])
             }
-            Image(uiImage: image)
+            Image(uiImage: imageFront)
+                .resizable()
+                .scaledToFit()
+                .frame(height: 200)
+            Image(uiImage: imageLeft)
+                .resizable()
+                .scaledToFit()
+                .frame(height: 200)
+            Image(uiImage: imageRight)
                 .resizable()
                 .scaledToFit()
                 .frame(height: 200)
 
+            Button("Siguiente Imagen") {
+                if captureStep < 2 {
+                    captureStep += 1
+                }
+            }
+            .disabled(getCurrentImage().wrappedValue.cgImage == nil)
+
             Button("Registrar Usuario") {
+                guard imageFront.cgImage != nil, imageLeft.cgImage != nil, imageRight.cgImage != nil else {
+                    alertMessage = "Debes capturar las tres imágenes."
+                    showAlert = true
+                    return
+                }
+
                 let user = User(id: 0, nombre: nombre, apellido: apellido,
                                 codigo_unico: codigoUnico, email: email,
                                 requisitoriado: requisitoriado)
-                APIService.shared.registerUser(user: user, image: image) { result in
+                APIService.shared.registerUser(user: user, imageFront: imageFront, imageLeft: imageLeft, imageRight: imageRight) { result in
                     DispatchQueue.main.async {
                         switch result {
                         case .success(_):
@@ -67,10 +91,28 @@ struct RegisterView: View {
             }
         }
         .sheet(isPresented: $showImagePicker) {
-            ImagePicker(sourceType: self.sourceType, selectedImage: $image)
+            ImagePicker(sourceType: self.sourceType, selectedImage: getCurrentImage())
         }
         .alert(isPresented: $showAlert) {
             Alert(title: Text("Resultado"), message: Text(alertMessage), dismissButton: .default(Text("OK")))
+        }
+    }
+
+    func captureStepTitle() -> String {
+        switch captureStep {
+        case 0: return "Seleccionar Imagen Frontal"
+        case 1: return "Seleccionar Imagen Izquierda"
+        case 2: return "Seleccionar Imagen Derecha"
+        default: return "Captura completada"
+        }
+    }
+
+    func getCurrentImage() -> Binding<UIImage> {
+        switch captureStep {
+        case 0: return $imageFront
+        case 1: return $imageLeft
+        case 2: return $imageRight
+        default: return $imageFront
         }
     }
 }
