@@ -2,23 +2,31 @@
 //  ContentView.swift
 //  FacialSecurityApp
 //
-//  Created by Benson Hilario on 6/20/25.
+//  Created by Benson Hilario on 6/21/25.
 //
 
 import SwiftUI
 
 struct ContentView: View {
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
-        }
-        .padding()
-    }
-}
+        NavigationStack {
+            VStack(spacing: 30) {
+                Text("Facial Security App")
+                    .font(.largeTitle)
+                    .bold()
+                    .padding(.top, 50)
 
-#Preview {
-    ContentView()
+                NavigationLink("Registrar Usuario", destination: RegisterView())
+                    .buttonStyle(.borderedProminent)
+                    .font(.title2)
+
+                NavigationLink("Reconocer Rostro", destination: RecognizeView())
+                    .buttonStyle(.borderedProminent)
+                    .font(.title2)
+
+                Spacer()
+            }
+            .padding()
+        }
+    }
 }

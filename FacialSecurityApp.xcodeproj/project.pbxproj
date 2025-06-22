@@ -29,12 +29,23 @@
 		6C3912572E06675A00C0C9A5 /* FacialSecurityAppUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FacialSecurityAppUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
-/* Begin PBXFileSystemSynchronizedRootGroup section */
-		6C3912422E06675900C0C9A5 /* FacialSecurityApp */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = FacialSecurityApp;
-			sourceTree = "<group>";
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		6C810EA82E078B98002BFB3C /* Exceptions for "FacialSecurityApp" folder in "FacialSecurityApp" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				ContentView.swift,
+				FacialSecurityAppApp.swift,
+				Models/User.swift,
+				Network/APIService.swift,
+				RecognizeView.swift,
+				RegisterView.swift,
+				Utils/ImagePicker.swift,
+			);
+			target = 6C39123F2E06675900C0C9A5 /* FacialSecurityApp */;
 		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
 		6C3912502E06675A00C0C9A5 /* FacialSecurityAppTests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = FacialSecurityAppTests;
@@ -43,6 +54,14 @@
 		6C39125A2E06675A00C0C9A5 /* FacialSecurityAppUITests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = FacialSecurityAppUITests;
+			sourceTree = "<group>";
+		};
+		6C810E982E078B08002BFB3C /* FacialSecurityApp */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				6C810EA82E078B98002BFB3C /* Exceptions for "FacialSecurityApp" folder in "FacialSecurityApp" target */,
+			);
+			path = FacialSecurityApp;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -75,7 +94,7 @@
 		6C3912372E06675900C0C9A5 = {
 			isa = PBXGroup;
 			children = (
-				6C3912422E06675900C0C9A5 /* FacialSecurityApp */,
+				6C810E982E078B08002BFB3C /* FacialSecurityApp */,
 				6C3912502E06675A00C0C9A5 /* FacialSecurityAppTests */,
 				6C39125A2E06675A00C0C9A5 /* FacialSecurityAppUITests */,
 				6C3912412E06675900C0C9A5 /* Products */,
@@ -107,9 +126,6 @@
 			);
 			dependencies = (
 			);
-			fileSystemSynchronizedGroups = (
-				6C3912422E06675900C0C9A5 /* FacialSecurityApp */,
-			);
 			name = FacialSecurityApp;
 			packageProductDependencies = (
 			);
@@ -132,6 +148,7 @@
 			);
 			fileSystemSynchronizedGroups = (
 				6C3912502E06675A00C0C9A5 /* FacialSecurityAppTests */,
+				6C810E982E078B08002BFB3C /* FacialSecurityApp */,
 			);
 			name = FacialSecurityAppTests;
 			packageProductDependencies = (
@@ -175,6 +192,7 @@
 				TargetAttributes = {
 					6C39123F2E06675900C0C9A5 = {
 						CreatedOnToolsVersion = 16.4;
+						LastSwiftMigration = 1640;
 					};
 					6C39124C2E06675A00C0C9A5 = {
 						CreatedOnToolsVersion = 16.4;
@@ -395,6 +413,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 2FW9434CUQ;
@@ -413,6 +432,8 @@
 				PRODUCT_BUNDLE_IDENTIFIER = BensonHilario.FacialSecurityApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -423,6 +444,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 2FW9434CUQ;
@@ -441,6 +463,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = BensonHilario.FacialSecurityApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
