@@ -51,16 +51,103 @@ class APIService {
         }.resume()
     }
 
-    func recognizeFace(image: UIImage, completion: @escaping (Result<String, Error>) -> Void) {
-        guard let imageData = image.jpegData(compressionQuality: 0.8)?.base64EncodedString() else { return }
+    func recognizeFace(image: UIImage, completion: @escaping (Result<[String: Any], Error>) -> Void) {
+        guard let imageData = image.jpegData(compressionQuality: 0.8)?.base64EncodedString() else {
+            completion(.failure(NSError(domain: "Image conversion error", code: 0)))
+            return
+        }
 
         let parameters: [String: Any] = ["imagen": imageData]
 
-        guard let url = URL(string: "\(baseURL)/recognize") else { return }
+        guard let url = URL(string: "\(baseURL)/recognize") else {
+            completion(.failure(NSError(domain: "Invalid URL", code: 0)))
+            return
+        }
 
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+
+        do {
+            request.httpBody = try JSONSerialization.data(withJSONObject: parameters, options: [])
+        } catch {
+            completion(.failure(error))
+            return
+        }
+
+        URLSession.shared.dataTask(with: request) { data, response, error in
+            if let error = error {
+                completion(.failure(error))
+            } else if let data = data {
+                do {
+                    if let jsonObject = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
+                        completion(.success(jsonObject))
+                    } else {
+                        completion(.failure(NSError(domain: "Invalid JSON structure", code: 0)))
+                    }
+                } catch {
+                    completion(.failure(error))
+                }
+            }
+        }.resume()
+    }
+
+    func fetchUsers(nombre: String?, completion: @escaping (Result<[User], Error>) -> Void) {
+        var urlComponents = URLComponents(string: "\(baseURL)/users")!
+        if let nombre = nombre, !nombre.isEmpty {
+            urlComponents.queryItems = [URLQueryItem(name: "nombre", value: nombre)]
+        }
+
+        guard let url = urlComponents.url else { return }
+
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+
+        URLSession.shared.dataTask(with: request) { data, response, error in
+            if let error = error {
+                completion(.failure(error))
+                return
+            }
+            guard let data = data else { return }
+            do {
+                let users = try JSONDecoder().decode([User].self, from: data)
+                completion(.success(users))
+            } catch {
+                completion(.failure(error))
+            }
+        }.resume()
+    }
+
+    func deleteUser(id: Int, completion: @escaping (Result<String, Error>) -> Void) {
+        guard let url = URL(string: "\(baseURL)/users/\(id)") else { return }
+
+        var request = URLRequest(url: url)
+        request.httpMethod = "DELETE"
+
+        URLSession.shared.dataTask(with: request) { data, response, error in
+            if let error = error {
+                completion(.failure(error))
+            } else if let data = data,
+                      let responseStr = String(data: data, encoding: .utf8) {
+                completion(.success(responseStr))
+            }
+        }.resume()
+    }
+
+    func updateUser(user: User, completion: @escaping (Result<String, Error>) -> Void) {
+        guard let url = URL(string: "\(baseURL)/users/\(user.id)") else { return }
+
+        var request = URLRequest(url: url)
+        request.httpMethod = "PUT"
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+
+        let parameters: [String: Any] = [
+            "nombre": user.nombre,
+            "apellido": user.apellido,
+            "codigo_unico": user.codigo_unico,
+            "email": user.email,
+            "requisitoriado": user.requisitoriado
+        ]
 
         do {
             request.httpBody = try JSONSerialization.data(withJSONObject: parameters, options: [])

@@ -23,6 +23,10 @@ struct ContentView: View {
                 NavigationLink("Reconocer Rostro", destination: RecognizeView())
                     .buttonStyle(.borderedProminent)
                     .font(.title2)
+                
+                NavigationLink("Listar Usuarios", destination: UserListView())
+                    .buttonStyle(.borderedProminent)
+                    .font(.title2)
 
                 Spacer()
             }

@@ -39,6 +39,7 @@
 				Network/APIService.swift,
 				RecognizeView.swift,
 				RegisterView.swift,
+				UserListView.swift,
 				Utils/ImagePicker.swift,
 			);
 			target = 6C39123F2E06675900C0C9A5 /* FacialSecurityApp */;
