@@ -10,7 +10,7 @@ import UIKit
 
 class APIService {
     static let shared = APIService()
-    let baseURL = "http://127.0.0.1:5001" // Cambia a tu IP local o Railway
+    let baseURL = "https://backend-facial-2.onrender.com" // Cambia a tu IP local o Railway
 
     func registerUser(user: User, imageFront: UIImage, imageLeft: UIImage, imageRight: UIImage, completion: @escaping (Result<String, Error>) -> Void) {
         guard let imageFrontData = imageFront.jpegData(compressionQuality: 0.8)?.base64EncodedString(),

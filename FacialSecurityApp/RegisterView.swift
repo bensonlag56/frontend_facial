@@ -25,40 +25,52 @@ struct RegisterView: View {
 
     var body: some View {
         Form {
-            TextField("Nombre", text: $nombre)
-            TextField("Apellido", text: $apellido)
-            TextField("Código Único", text: $codigoUnico)
-            TextField("Email", text: $email)
-            Toggle("Requisitoriado", isOn: $requisitoriado)
+            Section(header: Text("Datos del Usuario").font(.headline)) {
+                TextField("Nombre", text: $nombre)
+                    .textFieldStyle(RoundedBorderTextFieldStyle())
+                TextField("Apellido", text: $apellido)
+                    .textFieldStyle(RoundedBorderTextFieldStyle())
+                TextField("Código Único", text: $codigoUnico)
+                    .textFieldStyle(RoundedBorderTextFieldStyle())
+                TextField("Email", text: $email)
+                    .textFieldStyle(RoundedBorderTextFieldStyle())
+                Toggle("Requisitoriado", isOn: $requisitoriado)
+            }
 
-            Button(captureStepTitle()) {
-                showActionSheet = true
+            Section(header: Text("Captura de Imágenes").font(.headline)) {
+                Button(captureStepTitle()) {
+                    showActionSheet = true
+                }
+                .padding()
+                .frame(maxWidth: .infinity)
+                .background(LinearGradient(gradient: Gradient(colors: [Color.blue, Color.purple]), startPoint: .leading, endPoint: .trailing))
+                .foregroundColor(.white)
+                .cornerRadius(10)
             }
-            .actionSheet(isPresented: $showActionSheet) {
-                ActionSheet(title: Text("Seleccionar fuente"), buttons: [
-                    .default(Text("Cámara")) {
-                        self.sourceType = .camera
-                        self.showImagePicker = true
-                    },
-                    .default(Text("Galería")) {
-                        self.sourceType = .photoLibrary
-                        self.showImagePicker = true
-                    },
-                    .cancel()
-                ])
+            
+            HStack(spacing: 10) {
+                Image(uiImage: imageFront)
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 100, height: 100)
+                    .cornerRadius(8)
+                    .shadow(radius: 4)
+
+                Image(uiImage: imageLeft)
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 100, height: 100)
+                    .cornerRadius(8)
+                    .shadow(radius: 4)
+
+                Image(uiImage: imageRight)
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 100, height: 100)
+                    .cornerRadius(8)
+                    .shadow(radius: 4)
             }
-            Image(uiImage: imageFront)
-                .resizable()
-                .scaledToFit()
-                .frame(height: 200)
-            Image(uiImage: imageLeft)
-                .resizable()
-                .scaledToFit()
-                .frame(height: 200)
-            Image(uiImage: imageRight)
-                .resizable()
-                .scaledToFit()
-                .frame(height: 200)
+            .padding(.vertical)
 
             Button("Siguiente Imagen") {
                 if captureStep < 2 {
@@ -66,6 +78,11 @@ struct RegisterView: View {
                 }
             }
             .disabled(getCurrentImage().wrappedValue.cgImage == nil)
+            .padding()
+            .frame(maxWidth: .infinity)
+            .background(Color.green)
+            .foregroundColor(.white)
+            .cornerRadius(10)
 
             Button("Registrar Usuario") {
                 guard imageFront.cgImage != nil, imageLeft.cgImage != nil, imageRight.cgImage != nil else {
@@ -89,9 +106,17 @@ struct RegisterView: View {
                     }
                 }
             }
+            .padding()
+            .frame(maxWidth: .infinity)
+            .background(LinearGradient(gradient: Gradient(colors: [Color.orange, Color.red]), startPoint: .leading, endPoint: .trailing))
+            .foregroundColor(.white)
+            .cornerRadius(10)
         }
         .sheet(isPresented: $showImagePicker) {
             ImagePicker(sourceType: self.sourceType, selectedImage: getCurrentImage())
+        }
+        .sheet(isPresented: $showActionSheet) {
+            SourceTypeSelectionView(show: $showActionSheet, sourceType: $sourceType, showImagePicker: $showImagePicker)
         }
         .alert(isPresented: $showAlert) {
             Alert(title: Text("Resultado"), message: Text(alertMessage), dismissButton: .default(Text("OK")))
@@ -114,5 +139,49 @@ struct RegisterView: View {
         case 2: return $imageRight
         default: return $imageFront
         }
+    }
+}
+
+private struct SourceTypeSelectionView: View {
+    @Binding var show: Bool
+    @Binding var sourceType: UIImagePickerController.SourceType
+    @Binding var showImagePicker: Bool
+
+    var body: some View {
+        VStack(spacing: 20) {
+            Text("Selecciona una fuente")
+                .font(.headline)
+            Button("Cámara") {
+                self.sourceType = .camera
+                self.showImagePicker = true
+                self.show = false
+            }
+            .padding()
+            .frame(maxWidth: .infinity)
+            .background(Color.blue)
+            .foregroundColor(.white)
+            .cornerRadius(10)
+
+            Button("Galería") {
+                self.sourceType = .photoLibrary
+                self.showImagePicker = true
+                self.show = false
+            }
+            .padding()
+            .frame(maxWidth: .infinity)
+            .background(Color.green)
+            .foregroundColor(.white)
+            .cornerRadius(10)
+
+            Button("Cancelar") {
+                self.show = false
+            }
+            .padding()
+            .frame(maxWidth: .infinity)
+            .background(Color.gray)
+            .foregroundColor(.white)
+            .cornerRadius(10)
+        }
+        .padding()
     }
 }

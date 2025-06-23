@@ -10,27 +10,49 @@ import SwiftUI
 struct ContentView: View {
     var body: some View {
         NavigationStack {
-            VStack(spacing: 30) {
-                Text("Facial Security App")
-                    .font(.largeTitle)
-                    .bold()
-                    .padding(.top, 50)
+            ZStack {
+                LinearGradient(gradient: Gradient(colors: [Color(.systemGray6), Color(.systemGray4)]), startPoint: .top, endPoint: .bottom)
+                    .ignoresSafeArea()
+                VStack(spacing: 30) {
+                    Text("Facial Security App")
+                        .font(.largeTitle)
+                        .bold()
+                        .padding(.top, 50)
 
-                NavigationLink("Registrar Usuario", destination: RegisterView())
-                    .buttonStyle(.borderedProminent)
-                    .font(.title2)
+                    NavigationLink(destination: RegisterView()) {
+                        Text("Registrar Usuario")
+                            .frame(maxWidth: .infinity)
+                            .padding()
+                            .background(LinearGradient(gradient: Gradient(colors: [Color.blue, Color.purple]), startPoint: .leading, endPoint: .trailing))
+                            .foregroundColor(.white)
+                            .cornerRadius(10)
+                    }
+                    .padding(.horizontal)
 
-                NavigationLink("Reconocer Rostro", destination: RecognizeView())
-                    .buttonStyle(.borderedProminent)
-                    .font(.title2)
-                
-                NavigationLink("Listar Usuarios", destination: UserListView())
-                    .buttonStyle(.borderedProminent)
-                    .font(.title2)
+                    NavigationLink(destination: RecognizeView()) {
+                        Text("Reconocer Rostro")
+                            .frame(maxWidth: .infinity)
+                            .padding()
+                            .background(LinearGradient(gradient: Gradient(colors: [Color.green, Color.teal]), startPoint: .leading, endPoint: .trailing))
+                            .foregroundColor(.white)
+                            .cornerRadius(10)
+                    }
+                    .padding(.horizontal)
 
-                Spacer()
+                    NavigationLink(destination: UserListView()) {
+                        Text("Listar Usuarios")
+                            .frame(maxWidth: .infinity)
+                            .padding()
+                            .background(LinearGradient(gradient: Gradient(colors: [Color.orange, Color.red]), startPoint: .leading, endPoint: .trailing))
+                            .foregroundColor(.white)
+                            .cornerRadius(10)
+                    }
+                    .padding(.horizontal)
+
+                    Spacer()
+                }
+                .padding()
             }
-            .padding()
         }
     }
 }

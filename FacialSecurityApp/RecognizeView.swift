@@ -34,6 +34,12 @@ struct RecognizeView: View {
             Button("Seleccionar Imagen") {
                 showActionSheet = true
             }
+            .padding()
+            .frame(maxWidth: .infinity)
+            .background(LinearGradient(gradient: Gradient(colors: [Color.blue, Color.purple]), startPoint: .leading, endPoint: .trailing))
+            .foregroundColor(.white)
+            .cornerRadius(10)
+            .padding(.horizontal)
             .actionSheet(isPresented: $showActionSheet) {
                 ActionSheet(title: Text("Seleccionar fuente"), buttons: [
                     .default(Text("Cámara")) {
@@ -50,7 +56,10 @@ struct RecognizeView: View {
             Image(uiImage: image)
                 .resizable()
                 .scaledToFit()
-                .frame(height: 200)
+                .frame(height: 250)
+                .cornerRadius(12)
+                .shadow(radius: 4)
+                .padding()
 
             Button("Reconocer Rostro") {
                 APIService.shared.recognizeFace(image: image) { result in
@@ -87,8 +96,17 @@ struct RecognizeView: View {
                     }
                 }
             }
+            .padding()
+            .frame(maxWidth: .infinity)
+            .background(LinearGradient(gradient: Gradient(colors: [Color.green, Color.teal]), startPoint: .leading, endPoint: .trailing))
+            .foregroundColor(.white)
+            .cornerRadius(10)
+            .padding(.horizontal)
+
             Text(resultMessage)
                 .padding()
+                .font(.subheadline)
+                .foregroundColor(.gray)
         }
         .sheet(isPresented: $showImagePicker) {
             ImagePicker(sourceType: self.sourceType, selectedImage: $image)
